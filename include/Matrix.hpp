@@ -16,6 +16,7 @@ namespace gol
             Matrix(std::size_t row_number, std::size_t col_number);
 
             void reset_tiles();
+            void update();
 
             Tile& operator[](std::size_t i);
             Tile const& operator[](std::size_t i) const;

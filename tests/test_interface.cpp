@@ -6,7 +6,7 @@ int main()
 {
     std::cout << "Helloworld" << std::endl;
 
-    gol::Matrix matrix(32, 32);
+    gol::Matrix matrix(100, 100);
 
     gol::Interface interface(matrix);
 
@@ -15,6 +15,11 @@ int main()
         interface.eventManagement();
 
         interface.clear();
+
+        if (interface.isRunning())
+        {
+            interface.update();
+        }
 
         interface.drawMatrix();
 

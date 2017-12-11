@@ -13,9 +13,13 @@ class Interface : public sf::RenderWindow
  public:
   Interface(const Matrix & matrix);
 
+  void update();
+
   void drawMatrix();
 
   void eventManagement();
+
+  bool isRunning();
 
  private:
   Matrix matrix;
@@ -23,9 +27,9 @@ class Interface : public sf::RenderWindow
   void updateState(const sf::Event & event);
   void updateTile(const sf::Event & event);
   sf::Vector2u getTilePosition(const sf::Event & event);
-  bool buttonPressed;
   gol::State state;
-
+  bool buttonPressed;
+  bool running;
 };
 
 }

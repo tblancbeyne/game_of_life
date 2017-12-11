@@ -1,5 +1,6 @@
 #include "Matrix.hpp"
 
+#include <iostream>
 #include <cassert>
 
 namespace gol
@@ -23,6 +24,46 @@ void Matrix::reset_tiles()
     for(std::size_t i = 0; i < col_number(); ++i)
         for(std::size_t j = 0; j < row_number(); ++j)
             operator()(i, j).setState(State::None);
+}
+
+void Matrix::update()
+{
+    gol::Matrix tmp(row_number(), col_number());
+
+    for (std::size_t i = 0; i < row_number(); ++i)
+        for (std::size_t j = 0; j < col_number(); ++j)
+        {
+            std::size_t count = 0;
+            for (int k = -1; k <= 1; ++k)
+                for (int l = -1; l <= 1; ++l)
+                    if (k != 0 || l != 0)
+                        if (i + k > 0 && i + k < row_number() && j + l > 0 && j + l < col_number())
+                            if (operator()(i + k, j + l).getState() == gol::State::In)
+                                ++count;
+
+            if (count == 3)
+            {
+                tmp(i,j).setState(gol::State::In);
+            }
+            else if (count > 3)
+            {
+                tmp(i,j).setState(gol::State::None);
+            }
+            else if (count == 2)
+            {
+                tmp(i,j).setState(operator()(i,j).getState());
+            }
+            else if (count < 2)
+            {
+                tmp(i,j).setState(gol::State::None);
+            }
+        }
+
+    for (std::size_t i = 0; i < row_number(); ++i)
+        for (std::size_t j = 0; j < col_number(); ++j)
+        {
+            operator()(i,j).setState(tmp(i,j).getState());
+        }
 }
 
 Tile const& Matrix::operator[](std::size_t i) const

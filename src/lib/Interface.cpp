@@ -5,11 +5,9 @@
 namespace gol
 {
 
-Interface::Interface(const Matrix & matrix)
+Interface::Interface(const Matrix & matrix) : matrix{matrix}, state{gol::State::None}, buttonPressed{false}, running{false}
 {
-    this->matrix = matrix;
     this->matrix.reset_tiles();
-
     this->matrix.set_square_size(sf::Vector2u(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height));
 
     std::size_t width = this->matrix.get_square_size() * this->matrix.col_number();
@@ -17,7 +15,7 @@ Interface::Interface(const Matrix & matrix)
 
     create(sf::VideoMode(width,height), "Game of Life", sf::Style::Close + sf::Style::Resize);
 
-    setFramerateLimit(30);
+//    setFramerateLimit(30);
 }
 
 void Interface::eventManagement()
@@ -34,14 +32,33 @@ void Interface::eventManagement()
             resize(event);
         }
 
-        if (event.type == sf::Event::MouseButtonPressed || event.type == sf::Event::MouseButtonReleased)
-            updateState(event);
+        if (!buttonPressed)
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)
+            {
+                running = !running;
+            }
 
-        if (event.type == sf::Event::MouseMoved && buttonPressed)
+        if (!running)
         {
-            updateTile(event);
+            if (event.type == sf::Event::MouseButtonPressed || event.type == sf::Event::MouseButtonReleased)
+                updateState(event);
+
+            if (event.type == sf::Event::MouseMoved && buttonPressed)
+            {
+                updateTile(event);
+            }
         }
     }
+}
+
+void Interface::update()
+{
+    matrix.update();
+}
+
+bool Interface::isRunning()
+{
+    return running;
 }
 
 void Interface::drawMatrix()
