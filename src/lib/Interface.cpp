@@ -127,6 +127,8 @@ void Interface::updateState(const sf::Event & event)
                 state = State::In;
                 break;
         }
+
+        updateTile(event);
     }
     catch (std::out_of_range) {}
 }
